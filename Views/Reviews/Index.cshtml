@@ -1,0 +1,215 @@
+﻿@model IEnumerable<EatEvals.Models.Review>
+@{
+    ViewData["Title"] = "Reviews";
+}
+@using Microsoft.AspNetCore.Identity
+@using EatEvals.Areas.Identity.Data
+
+@inject SignInManager<RestaurantReviewUser> SignInManager
+@inject UserManager<RestaurantReviewUser> UserManager
+
+@* Banner Post *@
+<div class="container-fluid">
+    <div class="container banner-box">
+        <div class="banner text-white">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <h1>Special Offer!</h1>
+                    <p>Enjoy an exclusive 30% discount on all our products this month!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <div class="container-fluid">
+        <div class="index-content container searching">
+
+        <!-- Search -->
+        <form method="get" action="@Url.Action("Index")" class="needs-validation" novalidate>
+            <div class="row g-3 align-items-center justify-content-center">
+                <div class="col-md-4">
+                    <select id="searchField" name="searchField" class="form-select form-control-lg " required>
+                        <option value="" selected disabled hidden>Select Search Field</option>
+                        <option value="RestaurantName">Restaurant Name</option>
+                        <option value="FoodName">Food Name</option>
+                        <option value="PublishingDate">Publishing Date</option>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="searchQuery" name="searchQuery" class="form-control form-control-lg" placeholder="Enter Search Query" value="@ViewBag.SearchQuery" required>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" name="searchButtonClicked" value="true" class="btn btn-primary btn-lg search-btn ">Search</button>
+                </div>
+            </div>
+        </form>
+
+
+
+                @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
+                {
+                    <p style="color: red;">@ViewBag.ErrorMessage</p>
+                }
+               
+                <!--Create Box-->
+                    <div class="container text-center d-flex createBox">
+                        <h1>Restaurant in Waterloo</h1>
+                        <p>
+                            <a asp-action="Create" class="btn btn-primary createNewReviewButton">Give Review</a>
+                        </p>
+                    </div>
+        </div>
+    </div>
+
+<!-- List of Data-->
+<div class="tableBox">
+    <div class="table-responsive container">
+        <h1 class="heading">What's new in the Neighborhood</h1>
+
+        <div class="info d-flex">
+            @{
+                int count = 0; 
+            }
+
+            @foreach (var item in Model)
+            {
+                if (count < 4) 
+                {
+                    <div class="mt-4">
+                        <div class=" d-flex">
+          
+                            <div class="mb-3">
+                                <div class="card h-100">
+          
+                                    <a href="@Url.Action("Details", new { id = item.Id })" class="text-decoration-none text-dark card_a">
+                                        @* <img src="@Url.Action("GetImage", new { id = item.Id })" class="card-img-top cardImage" alt="Food Image"> *@
+                                        <img src="https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/d2/09/3f/wings-view-vibes.jpg?w=100&h=-1&s=1" alt="Alternate Text" />
+                                        <div class="card-body">
+                                            <h4 class="card-title">@Html.DisplayFor(modelItem => item.Restaurant)</h4>
+                                            <h5 class="card-text">@Html.DisplayFor(modelItem => item.Food)</h5>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- Card ends -->
+                        </div>
+                    </div>
+
+                    count++; 
+                }
+                else
+                {
+                    break; 
+                }
+            }
+
+            <div class="mt-4">
+                <div class=" d-flex">
+          
+                    <div class="mb-3">
+                        <div class="extra_card">
+                            <div class="text-decoration-none text-dark card_extra">
+  
+                                <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?q=80&w=1980&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Alternate Text" />
+                                <div class="card-body">
+                                    <h4 class="card-title">Recent updates and events</h4>
+                                    <p>
+                                        From happy hour to live music, see the latest updates near you.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Card ends -->
+                </div>
+            </div>
+        </div>
+
+        <h1 class="browse">Browser Food At Waterloo</h1>
+
+
+        <div class="container mt-4">
+            @if (Model.Any())
+            {
+                <div class="card_container">
+                    @foreach (var item in Model)
+                    {
+                        <div class="mb-3">
+                            <div class="card list_card">
+                                @* <img src="https://media.istockphoto.com/id/1368935114/photo/vegan-asian-recipes-assorted-brown-rice-curry-masala-poke-do.jpg?s=2048x2048&w=is&k=20&c=xY2dIedvRPfG7U9RHvXIUtTHSEDt2_5IHgSJQFSbQBA=" alt="Alternate Text" /> *@
+                                 <img src="@Url.Action("GetImage", new { id = item.Id })" class="card-img-top" alt="Food Image">
+                                <div class="card-body">
+                                    <h5 class="card-text card_food">@Html.DisplayFor(modelItem => item.Food)</h5>
+                                    <div class="score-circles" data-score="@item.Score"></div>
+                                    <p class="card-text card_price"><strong>Price: </strong> $@Html.DisplayFor(modelItem => item.Price)</p>
+                                    <p class="card-text card_date">Review Date: <span class="text-muted">@item.Date.ToString("yyyy-MM-dd HH:mm")</span></p>
+                                    <h4 class="card-title card_name">@Html.DisplayFor(modelItem => item.Restaurant)</h4>
+                                </div>
+                                <div class="card-footer">
+                                    @if (User?.Identity.Name == "ConestogaCollege.123@gmail.com")
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit Your Review</a>
+                                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger btn-sm">Delete</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary btn-sm">Edit Your Review</a>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-info" role="alert">
+                    No results found.
+                </div>
+            }
+        </div>
+
+
+    </div>
+</div>
+
+@* Banner Post *@
+<div class="container-fluid">
+    <div class="container banner-box">
+        <div class="banner text-white">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <h1>Special Offer!</h1>
+                    <p>Enjoy an exclusive 30% discount on all our products this month!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const scoreContainers = document.querySelectorAll('.score-circles');
+
+        scoreContainers.forEach(container => {
+            const score = parseInt(container.getAttribute('data-score'));
+            for (let i = 1; i <= 5; i++) {
+                const circle = document.createElement('span');
+                circle.className = 'score-circle';
+                if (i <= score) {
+                    circle.classList.add('filled');
+                }
+                container.appendChild(circle);
+            }
+        });
+    });
+
+</script>
+
+ 
+
+
+

@@ -1,0 +1,112 @@
+﻿@model EatEvals.Models.Reviewviewmodel
+@{
+    ViewData["Title"] = "Create";
+}
+@using Microsoft.AspNetCore.Identity
+@using EatEvals.Areas.Identity.Data
+
+@inject SignInManager<RestaurantReviewUser> SignInManager
+@inject UserManager<RestaurantReviewUser> UserManager
+
+@* Banner Post *@
+<div class="container-fluid">
+    <div class="container banner-box">
+        <div class="banner text-white">
+            <div class="row align-items-center">
+                <div class="col-md-12">
+                    <h1>Special Offer!</h1>
+                    <p>Enjoy an exclusive 30% discount on all our products this month!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid py-4 create-new">
+@*     <a asp-action="Index" class="btn btn-link">Back to List</a> *@
+    <div class="container py-5">
+    <div class="row ">
+        <!-- Banners Section -->
+            <div class="col-md-4 d-flex flex-column">
+                <div class="banner" style="background-image: url('@Url.Content("https://media.istockphoto.com/id/1368935114/photo/vegan-asian-recipes-assorted-brown-rice-curry-masala-poke-do.jpg?s=2048x2048&w=is&k=20&c=xY2dIedvRPfG7U9RHvXIUtTHSEDt2_5IHgSJQFSbQBA=")');">
+                    <div class="banner-overlay">
+                        <h3>Top Dishes This Week</h3>
+                        <p>Discover what's trending in the food scene.</p>
+                    </div>
+                </div>
+                <div class="banner" style="background-image: url('@Url.Content("https://media.istockphoto.com/id/1455890332/photo/dinner-table-of-italian-meals-dishes.jpg?s=2048x2048&w=is&k=20&c=Hd0bUnvgE19Bw_ytfuZYAas61OUUTf0wHs0Twb7_s7Y=")');">
+                    <div class="banner-overlay">
+                        <h3>Featured Restaurants</h3>
+                        <p>Explore our weekly spotlight on the best places to dine.</p>
+                    </div>
+                </div>
+         @*        <div class="banner" style="background-image: url('@Url.Content("https://media.istockphoto.com/id/1151868187/photo/asian-food-background-with-various-ingredients-on-rustic-stone-background-top-view.jpg?s=2048x2048&w=is&k=20&c=Wu8g5pjBWXDl4O99G7LvjL6r6d5y6ou2VS4igYxMH3k=")');">
+                    <div class="banner-overlay">
+                        <h3>Chef's Specials</h3>
+                        <p>Get exclusive insights into chefs’ favorite creations.</p>
+                    </div>
+                </div> *@
+            </div>
+
+
+        <!-- Form Section -->
+        <div class="col-md-8 right-boxes">
+            <h1>Create New Reviews</h1>
+            <hr>
+            <br />
+            <form asp-action="Create" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                <div class="form-group mb-3">
+                    <label for="Restaurant">Restaurant Name</label>
+                        <select asp-for="Restaurant" class="form-control" asp-items="@ViewBag.RestaurantNames" style="font-size: 16px;"></select>
+                    <span asp-validation-for="Restaurant" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Food">Food Name</label>
+                    <input asp-for="Food" class="form-control" style="font-size: 16px;" />
+                    <span asp-validation-for="Food" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Price">Price</label>
+                    <input asp-for="Price" class="form-control" style="font-size: 16px;" />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Score">Score</label>
+                    <input asp-for="Score" class="form-control" style="font-size: 16px;" />
+                    <span asp-validation-for="Score" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Date">Review Date</label>
+                    <input asp-for="Date" class="form-control" style="font-size: 16px;" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label for="Photo">Photo</label>
+                    <input type="file" asp-for="Photo" class="form-control" style="font-size: 16px;" />
+                    <span asp-validation-for="Photo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Give Review" class="btn btn-primary btn-lg search-btn" />
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+</div>
+
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

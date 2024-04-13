@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using EatEvals.Areas.Identity.Data
+@{
+    ViewData["Title"] = "Home Page";
+}
+@inject UserManager<RestaurantReviewUser> UserManager
+
+
+    <div class="container homeContainer">
+        <div class="bannerContainer">
+            <div class="contentBox">
+                <h1>Welcome iReview.</h1>
+                <h3>Explore, Review, Visit & Know <br /> About Foods and Restaurant in Waterloo.</h3>
+            </div>
+            <div class="searchBox">
+                <nav class="navbar bg-body-tertiary">
+                    <div class="container-fluid">
+                        <div class="d-flex formBox" role="search">
+                            <input class="form-control me-2" type="search" placeholder="Search for reviews of foods and restaurants" aria-label="Search">
+                            <button id="iReview" class="btn" type="submit">Search</button>
+                        </div>
+                    </div>
+                </nav>
+            </div>
+            <div class="imageBox">
+                <img src="~/images/banner.webp" alt="HomePage Banner" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("iReview").addEventListener("click", function () {
+            window.location.href = '@Url.Action("Index", "Reviews", new { area = "" })';
+        });
+    </script>
